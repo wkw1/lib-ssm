@@ -1,0 +1,106 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkw.dao.BorrowDao">
+
+    <!-- 为dao接口中的方法提供SQL配置语句 -->
+    <insert id="insertOne">
+        <!--当出现主键冲突时(即重复秒杀时)，会报错;不想让程序报错，加入ignore-->
+        insert ignore into borrow_books(book_ISBN,stu_ID,expect_return_time)
+        values (#{bookISBN},#{stuID},#{expectReturnTime})
+    </insert>
+
+    <delete id="delOne" parameterType="int">
+        delete from borrow_books
+        where borrow_ID=#{borrowID}
+    </delete>
+
+    <!-- 查询一个学生的借书记录并关联到此本书的详细信息 -->
+    <select id="queryByID" parameterType="String" resultType="BorrowBookEntity">
+        <!-- 根据stuID查询borrowBookEntity对象 -->
+        select
+        bbs.borrow_ID,
+        bbs.book_ISBN,
+        bbs.stu_ID,
+        bbs.borrow_time,
+        bbs.expect_return_time,
+        bs.book_ISBN "book.book_ISBN",
+        bs.book_name "book.book_name",
+        bs.book_introduction "book.book_introduction",
+        bs.book_author "book.book_author",
+        bs.book_press "book.book_press",
+        bs.storage_time "book.storage_time",
+        bs.total_number "book.total_number",
+        bs.remaining_number "book.remaining_number",
+        bs.power_need "book.power_need",
+        bs.book_type "book.book_type"
+        from borrow_books  bbs
+        inner join books bs on bbs.book_ISBN = bs.book_ISBN
+        where bbs.stu_ID=#{stuID}
+    </select>
+
+    <select id="queryBorrowByID" parameterType="int" resultType="BorrowBookEntity">
+        select
+        bbs.borrow_ID,
+        bbs.book_ISBN,
+        bbs.stu_ID,
+        bbs.borrow_time,
+        bbs.expect_return_time,
+        bs.book_ISBN "book.book_ISBN",
+        bs.book_name "book.book_name",
+        bs.book_introduction "book.book_introduction",
+        bs.book_author "book.book_author",
+        bs.book_press "book.book_press",
+        bs.storage_time "book.storage_time",
+        bs.total_number "book.total_number",
+        bs.remaining_number "book.remaining_number",
+        bs.power_need "book.power_need",
+        bs.book_type "book.book_type",
+
+        ss.stu_name "student.stu_name",
+        ss.stu_ID "student.stu_ID",
+        ss.school "student.school",
+        ss.phone "student.phone",
+        ss.email "student.email",
+        ss.power "student.power",
+        ss.borrow_number "student.borrow_number"
+        from borrow_books  bbs
+        inner join books bs on bbs.book_ISBN = bs.book_ISBN
+        inner join students ss on bbs.stu_ID = ss.stu_ID
+        where bbs.borrow_ID=#{borrowID}
+    </select>
+
+    <select id="queryByIDAndISBN" resultType="BorrowBookEntity">
+         select
+        bbs.borrow_ID,
+        bbs.book_ISBN,
+        bbs.stu_ID,
+        bbs.borrow_time,
+        bbs.expect_return_time,
+        bs.book_ISBN "book.book_ISBN",
+        bs.book_name "book.book_name",
+        bs.book_introduction "book.book_introduction",
+        bs.book_author "book.book_author",
+        bs.book_press "book.book_press",
+        bs.storage_time "book.storage_time",
+        bs.total_number "book.total_number",
+        bs.remaining_number "book.remaining_number",
+        bs.power_need "book.power_need",
+        bs.book_type "book.book_type",
+
+        ss.stu_name "student.stu_name",
+        ss.stu_ID "student.stu_ID",
+        ss.school "student.school",
+        ss.phone "student.phone",
+        ss.email "student.email",
+        ss.power "student.power",
+        ss.borrow_number "student.borrow_number"
+        from borrow_books  bbs
+        inner join books bs on bbs.book_ISBN = bs.book_ISBN
+        inner join students ss on bbs.stu_ID = ss.stu_ID
+        where bbs.stu_ID=#{stuID} and bbs.book_ISBN=#{bookISBN}
+        order by borrow_time DESC
+        limit 0,1;
+    </select>
+
+</mapper>

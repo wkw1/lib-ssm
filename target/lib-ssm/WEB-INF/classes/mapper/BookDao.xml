@@ -1,0 +1,69 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkw.dao.BookDao">
+
+    <!-- 为dao接口中的方法提供SQL配置语句 -->
+
+    <update id="reduceOne">
+        update books
+        set remaining_number = remaining_number-1
+        where book_ISBN = #{bookISBN}
+        and remaining_number>0;
+    </update>
+
+    <update id="addOne">
+        update books
+        set remaining_number=remaining_number+1
+        where book_ISBN =#{bookISBN};
+    </update>
+
+    <select id="queryByISBN" parameterType="String" resultType="BookEntity">
+        select *
+        from books
+        where book_ISBN=#{bookISBN}
+    </select>
+
+    <select id="queryAll" parameterType="int" resultType="BookEntity">
+        select *
+        from books
+        order by storage_time desc
+        limit #{offset},#{limit};
+    </select>
+
+    <select id="queryByName" parameterType="String" resultType="BookEntity">
+        select *
+        from books
+        where book_name like concat('%',#{bookName},'%')
+        order by storage_time desc;
+    </select>
+    <!--CONCAT('%',#{name},'%')-->
+
+    <select id="queryByPress" resultType="BookEntity">
+        select *
+        from books
+        where book_press = #{bookPress}
+        order by storage_time desc;
+    </select>
+
+    <select id="queryByIntroduction" resultType="BookEntity">
+        select *
+        from books
+        where book_introduction like concat('%',#{bookIntroduction},'%')
+        order by storage_time desc;
+    </select>
+
+    <select id="queryByType" parameterType="String" resultType="BookEntity">
+        select *
+        from books
+        where book_type = #{bookType}
+        order by storage_time desc;
+    </select>
+
+    <select id="queryByAuthor" parameterType="String" resultType="BookEntity">
+        select *
+        from books
+        where book_author= #{bookAuthor}
+        order by storage_time desc;
+    </select>
+</mapper>

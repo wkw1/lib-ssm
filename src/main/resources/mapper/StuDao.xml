@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkw.dao.StuDao">
+    <select id="queryByID" resultType="StudentEntity">
+        select *
+        from students
+        where stu_ID=#{stuID}
+    </select>
+
+    <select id="queryByName" resultType="StudentEntity">
+        select *
+        from students
+        where stu_Name = #{stuName}
+    </select>
+
+    <select id="queryBySchool" resultType="StudentEntity">
+        select *
+        from students
+        where school = #{school}
+    </select>
+
+    <update id="addBorrowNum">
+        update students
+        set borrow_number = borrow_number+1
+        where stu_ID = #{stuID} and borrow_number <![CDATA[ < ]]> 30
+    </update>
+
+    <update id="reduceBorrowNum">
+        update students
+        set borrow_number = borrow_number-1
+        where stu_ID = #{stuID} and borrow_number>0
+    </update>
+
+    <update id="setPassword">
+        update students
+        set password = #{password}
+        where stu_ID = #{stuID}
+    </update>
+
+    <insert id="insertOne" parameterType="StudentEntity">
+        insert into students(stu_ID,stu_name,school,phone,email)
+        value(#{stuID},#{stuName},#{school},#{phone},#{email})
+    </insert>
+
+</mapper>

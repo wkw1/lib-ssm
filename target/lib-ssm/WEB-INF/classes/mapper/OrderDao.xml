@@ -1,0 +1,87 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkw.dao.OrderDao">
+
+    <insert id="insertOne">
+        insert ignore into order_books(stu_ID,book_ISBN)
+        value(#{stuID},#{bookISBN})
+    </insert>
+
+    <delete id="delOne">
+        delete from order_books
+        where stu_ID=#{stuID} and book_ISBN=#{bookISBN}
+    </delete>
+
+    <select id="queryOneByISBN" resultType="OrderBookEntity">
+        select *
+        from order_books
+        where book_ISBN = #{bookISBN}
+    </select>
+
+    <delete id="delOneByISBN">
+        delete from order_books
+        where book_ISBN=#{bookISBN}
+        limit #{limit}
+    </delete>
+
+    <select id="queryByID" resultType="OrderBookEntity">
+        select
+        obs.stu_ID,
+        obs.book_ISBN,
+        obs.order_time,
+
+        bs.book_ISBN "book.book_ISBN",
+        bs.book_name "book.book_name",
+        bs.book_introduction "book.book_introduction",
+        bs.book_author "book.book_author",
+        bs.book_press "book.book_press",
+        bs.storage_time "book.storage_time",
+        bs.total_number "book.total_number",
+        bs.remaining_number "book.remaining_number",
+        bs.power_need "book.power_need",
+        bs.book_type "book.book_type"
+        from order_books obs
+        inner join books bs on obs.book_ISBN = bs.book_ISBN
+        where obs.stu_ID = #{stuID}
+    </select>
+
+    <select id="queryByISBN" resultType="OrderBookEntity">
+        select
+        obs.stu_ID,
+        obs.book_ISBN,
+        obs.order_time,
+        ss.stu_ID "student.stuID",
+        ss.stu_name "student.stuName",
+        ss.school "student.school",
+        ss.phone "student.phone",
+        ss.email "student.email",
+        ss.power "student.power",
+        ss.borrow_number "student.borrow_number"
+        from order_books obs
+        inner join students ss on obs.stu_ID = ss.stu_ID
+        where obs.book_ISBN = #{bookISBN}
+    </select>
+
+    <select id="queryByIDAndISBN" resultType="OrderBookEntity">
+        select
+        obs.stu_ID,
+        obs.book_ISBN,
+        obs.order_time,
+
+        bs.book_ISBN "book.book_ISBN",
+        bs.book_name "book.book_name",
+        bs.book_introduction "book.book_introduction",
+        bs.book_author "book.book_author",
+        bs.book_press "book.book_press",
+        bs.storage_time "book.storage_time",
+        bs.total_number "book.total_number",
+        bs.remaining_number "book.remaining_number",
+        bs.power_need "book.power_need",
+        bs.book_type "book.book_type"
+        from order_books obs
+        inner join books bs on obs.book_ISBN = bs.book_ISBN
+        where obs.stu_ID = #{stuID} and obs.book_ISBN = #{bookISBN}
+    </select>
+
+</mapper>

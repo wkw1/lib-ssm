@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wkw.dao.ReturnDao">
+    <insert id="insertOne">
+        insert into return_books (borrow_ID,stu_ID,book_ISBN,borrow_time,return_time)
+        values (#{record.borrowID},#{record.stuID},#{record.bookISBN},
+        #{record.borrowTime},#{returnTime})
+    </insert>
+
+    <select id="queryByID" parameterType="String" resultType="ReturnBookEntity">
+        select
+        rbs.borrow_ID,
+        rbs.book_ISBN,
+        rbs.stu_ID,
+        rbs.borrow_time,
+        rbs.return_time,
+        bs.book_ISBN "book.book_ISBN",
+        bs.book_name "book.book_name",
+        bs.book_introduction "book.book_introduction",
+        bs.book_author "book.book_author",
+        bs.book_press "book.book_press",
+        bs.storage_time "book.storage_time",
+        bs.total_number "book.total_number",
+        bs.remaining_number "book.remaining_number",
+        bs.power_need "book.power_need",
+        bs.book_type "book.book_type",
+
+        ss.stu_name "student.stu_name",
+        ss.stu_ID "student.stu_ID",
+        ss.school "student.school",
+        ss.phone "student.phone",
+        ss.email "student.email",
+        ss.power "student.power",
+        ss.borrow_number "student.borrow_number"
+        from return_books  rbs
+        inner join books bs on rbs.book_ISBN = bs.book_ISBN
+        inner join students ss on rbs.stu_ID = ss.stu_ID
+        where rbs.stu_ID=#{stuID}
+        order by return_time desc;
+    </select>
+
+</mapper>
