@@ -12,6 +12,7 @@ public class StuActEp extends RuntimeException{
     private StuActStatEnum state;
 
     public StuActEp( StuActStatEnum state) {
+
         this.state = state;
     }
 
